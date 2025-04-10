@@ -8,15 +8,13 @@ namespace cheftechniker
     {
         public static async Task OnMessageDeleted(DiscordClient client, MessageDeletedEventArgs eventArgs)
         {
-            
             if (eventArgs.Message.Author == null) return;
             
             var logChannel = eventArgs.Guild.GetChannelAsync(Config.LogChannelId);
             
             Console.WriteLine(eventArgs.Message.Content);
 
-            var avatarUrl = eventArgs.Message.Author.AvatarUrl ?? eventArgs.Message.Author.DefaultAvatarUrl;
-
+            var avatarUrl = eventArgs.Message.Author.AvatarUrl;
 
             var embed = new DiscordEmbedBuilder()
                 .WithAuthor($"{eventArgs.Message.Author.Username}",
@@ -26,7 +24,7 @@ namespace cheftechniker
                 .WithDescription(
                     $"**Message sent by** {eventArgs.Message.Author.Mention} **deleted in** {eventArgs.Channel.Mention}")
                 .AddField("Message ID", eventArgs.Message.Id.ToString(), true)
-
+                .AddField("Content", eventArgs.Message.Content)
                 .AddField("Author ID", eventArgs.Message.Author.Id.ToString(), true)
                 .WithColor(DiscordColor.Red)
                 .WithTimestamp(DateTimeOffset.UtcNow);
@@ -36,7 +34,6 @@ namespace cheftechniker
 
         public static async Task OnMessageUpdated(DiscordClient client, MessageUpdatedEventArgs eventArgs)
         {
-            Console.WriteLine(eventArgs.Message.Content);
             if (eventArgs.Message.Content == eventArgs.MessageBefore?.Content) return; // skip formatting edits
 
             var logChannel = eventArgs.Guild.GetChannelAsync(Config.LogChannelId);
