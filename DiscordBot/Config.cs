@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace cheftechniker
+namespace DiscordBot
 {
     internal static class Config
     {
@@ -21,6 +21,7 @@ namespace cheftechniker
         public static ulong LogChannelId => ulong.Parse(Settings["LogChannelId"] ??
                                                         throw new MissingFieldException(
                                                             "Log channel id is needed (atm) to start the bot"));
+
         public static ulong DebugGuildId => ulong.Parse(Settings["DebugGuildId"] ??
                                                         throw new MissingFieldException(
                                                             "Debug guild id is needed (atm) to start the bot"));

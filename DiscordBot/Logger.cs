@@ -2,16 +2,20 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
-namespace cheftechniker
+namespace DiscordBot
 {
     internal static class Logger
     {
         public static async Task OnMessageDeleted(DiscordClient client, MessageDeletedEventArgs eventArgs)
         {
             if (eventArgs.Message.Author == null) return;
-            
-            var logChannel = eventArgs.Guild.GetChannelAsync(Config.LogChannelId);
-            
+
+            var guild = eventArgs.Guild;
+            var logChannelId = await Database.GetLogChannel(guild.Id);
+            if (logChannelId == 0UL) return;
+
+            var logChannel = guild.GetChannelAsync(logChannelId);
+
             Console.WriteLine(eventArgs.Message.Content);
 
             var avatarUrl = eventArgs.Message.Author.AvatarUrl;
@@ -36,8 +40,10 @@ namespace cheftechniker
         {
             if (eventArgs.Message.Content == eventArgs.MessageBefore?.Content) return; // skip formatting edits
 
-            var logChannel = eventArgs.Guild.GetChannelAsync(Config.LogChannelId);
-
+            var guild = eventArgs.Guild;
+            var logChannelId = await Database.GetLogChannel(guild.Id);
+            if (logChannelId == 0UL) return;
+            var logChannel = guild.GetChannelAsync(logChannelId);
             if (eventArgs.Message.Author != null)
             {
                 var avatarUrl = eventArgs.Message.Author.AvatarUrl;

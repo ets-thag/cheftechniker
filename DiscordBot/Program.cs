@@ -1,4 +1,4 @@
-﻿namespace cheftechniker;
+﻿namespace DiscordBot;
 
 internal static class Program
 {
@@ -6,6 +6,6 @@ internal static class Program
     {
         Config.Init();
         var bot = new Bot();
-        await bot.RunAsync();
+        await Bot.RunAsync();
     }
 }

@@ -1,17 +1,19 @@
+using System.ComponentModel;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 
-namespace cheftechniker.Commands;
+namespace DiscordBot.Commands;
 
 public class Fun
 {
     private static readonly HttpClient Http = new();
 
     [Command("cat")]
+    [Description("Get a random cat picture.")]
     public static async Task SendCatImage(CommandContext ctx)
     {
         const string imageUrl = "https://cataas.com/cat";
-        
+
         // The picture has to be saved to a file because otherwise I would always get the same file
         var tmpFolder = Path.Combine(AppContext.BaseDirectory, "tmp");
         Directory.CreateDirectory(tmpFolder);
