@@ -21,7 +21,7 @@ public class Bot
             extension.AddProcessor(new TextCommandProcessor());
         }, new CommandsConfiguration()
         {
-            DebugGuildId = Config.DebugGuildId,
+            DebugGuildId = 0 // Set to 0 to disable debug guild
         });
 
         builder.ConfigureEventHandlers(
