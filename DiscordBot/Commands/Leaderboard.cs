@@ -12,18 +12,37 @@ public class Leaderboard
     {
         var topUsers = await Database.GetTopVcUsers(ctx.Guild!.Id);
 
-        var embed = new DiscordEmbedBuilder()
-            .WithTitle("Voice Channel Leaderboard")
-            .WithColor(DiscordColor.Purple)
-            .WithTimestamp(DateTimeOffset.UtcNow);
+		string[] medals = ["🥇", "🥈", "🥉"];
 
-        foreach (var user in topUsers)
+       var embed = new DiscordEmbedBuilder
+    {
+        Title = $"🎙️ VC Leaderboard — {ctx.Guild.Name}",
+        Color = DiscordColor.Blurple,
+        Timestamp = DateTimeOffset.Now,
+        Footer = new DiscordEmbedBuilder.EmbedFooter
         {
-            Console.WriteLine($"UserId: {user.UserId}, GuildId: {user.GuildId}, MinutesInVc: {user.MinutesInVc}");
-            if (user.UserId == 0) continue;
-            var member = await ctx.Guild.GetMemberAsync(user.UserId);
-            embed.AddField($"{member.DisplayName}", $"{user.MinutesInVc} minutes", true);
+            Text = $"Requested by {ctx.User.Username}",
+            IconUrl = ctx.User.AvatarUrl
         }
+    };
+
+    var rank = 1;
+    var voiceActivities = topUsers as Database.VoiceActivity[] ?? topUsers.ToArray();
+    foreach (var user in voiceActivities)
+    {
+        var member = await ctx.Guild.GetMemberAsync(user.UserId);
+        var medal = rank <= 3 ? medals[rank - 1] : $"#{rank}";
+        var displayName = member.DisplayName;
+        var minutes = $"{user.MinutesInVc:N0} mins";
+
+        embed.AddField($"{medal} {displayName}", minutes, inline: false);
+        rank++;
+    }
+
+    if (voiceActivities.Length == 0)
+    {
+        embed.Description = "No voice activity tracked yet.";
+    }
 
         await ctx.RespondAsync(embed: embed.Build());
     }

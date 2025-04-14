@@ -62,7 +62,7 @@ public class General
     [Command("version")]
     [Description("Get the current version of the bot.")]
     [RequirePermissions(DiscordPermission.Administrator)]
-    public async Task ShowVersionCommand(CommandContext ctx)
+    public static async Task ShowVersionCommand(CommandContext ctx)
     {
         var version = VersionInfo.GetVersion();
         var changelog = VersionInfo.GetChangelog();
@@ -79,7 +79,7 @@ public class General
     [Command("update")]
     [Description("Update the bot to the latest version.")]
     [RequirePermissions(DiscordPermission.Administrator)]
-    public async Task UpdateCommand(CommandContext ctx)
+    public static async Task UpdateCommand(CommandContext ctx)
     {
         
         DiscordActivity status = new("Updating!", DiscordActivityType.Playing);
@@ -103,8 +103,11 @@ public class General
             }
         };
         process.Start();
-        string output = await process.StandardOutput.ReadToEndAsync();
-        string error = await process.StandardError.ReadToEndAsync();
-        process.WaitForExit();
+        var output = await process.StandardOutput.ReadToEndAsync();
+        var error = await process.StandardError.ReadToEndAsync();
+
+        Console.WriteLine($"Output: {output}");
+        Console.WriteLine($"Error: {error}");
+        await process.WaitForExitAsync();
     }
 }
