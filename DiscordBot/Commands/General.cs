@@ -17,6 +17,7 @@ public class General
         );
     }
 
+    // Admin only //
     [Command("botinfo")]
     [Description("Get information about the bot.")]
     [RequirePermissions(DiscordPermission.Administrator)]
@@ -39,5 +40,22 @@ public class General
         }
 
         await ctx.RespondAsync(embed: embed.Build());
+    }
+    
+    [Command("restart")]
+    [Description("Restart the bot.")]
+    [RequirePermissions(DiscordPermission.Administrator)]
+    public static async Task Restart(CommandContext ctx)
+    {
+        await ctx.RespondAsync(
+            new DiscordInteractionResponseBuilder()
+                .WithContent("Restarting bot...\ud83d\ude80")
+        );
+
+        DiscordActivity status = new("Restarting!", DiscordActivityType.Playing);
+        await ctx.Client.UpdateStatusAsync(status, DiscordUserStatus.Offline);
+
+        // Restart the bot
+        _ = Task.Delay(2000).ContinueWith(_ => Environment.Exit(0));
     }
 }

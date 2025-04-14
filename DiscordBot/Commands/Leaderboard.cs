@@ -38,7 +38,7 @@ public class Leaderboard
             .WithTitle("Your Voice Channel Activity")
             .WithColor(DiscordColor.Purple)
             .WithTimestamp(DateTimeOffset.UtcNow)
-            .AddField("Minutes in VC", $"{minutesInVc} minutes");
+            .AddField("Minutes in VC", $"{minutesInVc} minutes", true);
 
         await ctx.RespondAsync(embed: embed.Build());
     }
