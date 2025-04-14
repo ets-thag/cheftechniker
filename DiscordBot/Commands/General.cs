@@ -84,6 +84,11 @@ public class General
         
         DiscordActivity status = new("Updating!", DiscordActivityType.Playing);
         await ctx.Client.UpdateStatusAsync(status, DiscordUserStatus.DoNotDisturb);
+
+        await ctx.RespondAsync(
+            new DiscordInteractionResponseBuilder()
+                .WithContent("Updating bot...\ud83d\ude80")
+            );
         
         var process = new System.Diagnostics.Process
         {
