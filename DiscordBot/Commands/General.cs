@@ -53,9 +53,53 @@ public class General
         );
 
         DiscordActivity status = new("Restarting!", DiscordActivityType.Playing);
-        await ctx.Client.UpdateStatusAsync(status, DiscordUserStatus.Offline);
+        await ctx.Client.UpdateStatusAsync(status, DiscordUserStatus.DoNotDisturb);
 
-        // Restart the bot
-        _ = Task.Delay(2000).ContinueWith(_ => Environment.Exit(0));
+        // This works because the systemd service will restart the bot on failure
+        _ = Task.Delay(2000).ContinueWith(_ => Environment.Exit(-1));
+    }
+    
+    [Command("version")]
+    [Description("Get the current version of the bot.")]
+    [RequirePermissions(DiscordPermission.Administrator)]
+    public async Task ShowVersionCommand(CommandContext ctx)
+    {
+        var version = VersionInfo.GetVersion();
+        var changelog = VersionInfo.GetChangelog();
+
+        var embed = new DiscordEmbedBuilder()
+            .WithTitle($"📦 Bot Version: `{version}`")
+            .WithDescription("📝 Recent Changes:\n" + $"```md\n{changelog}\n```")
+            .WithColor(DiscordColor.Green)
+            .WithTimestamp(DateTimeOffset.UtcNow);
+
+        await ctx.RespondAsync(embed: embed.Build());
+    }
+    
+    [Command("update")]
+    [Description("Update the bot to the latest version.")]
+    [RequirePermissions(DiscordPermission.Administrator)]
+    public async Task UpdateCommand(CommandContext ctx)
+    {
+        
+        DiscordActivity status = new("Updating!", DiscordActivityType.Playing);
+        await ctx.Client.UpdateStatusAsync(status, DiscordUserStatus.DoNotDisturb);
+        
+        var process = new System.Diagnostics.Process
+        {
+            StartInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = "./update.sh",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }
+        };
+        process.Start();
+        string output = await process.StandardOutput.ReadToEndAsync();
+        string error = await process.StandardError.ReadToEndAsync();
+        process.WaitForExit();
     }
 }
