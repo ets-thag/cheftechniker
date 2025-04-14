@@ -11,9 +11,11 @@ public class General
     [Description("Ping the bot.")]
     public static async Task Ping(CommandContext ctx)
     {
+        var ping = ctx.Client.GetConnectionLatency(ctx.Guild!.Id);
+        
         await ctx.RespondAsync(
             new DiscordInteractionResponseBuilder()
-                .WithContent("Pong!\ud83c\udfd3")
+                .WithContent($"Pong with {ping.Milliseconds}ms!\ud83c\udfd3")
         );
     }
 
