@@ -35,7 +35,7 @@ public class Bot
 
         await client.ConnectAsync(status, DiscordUserStatus.Online);
 
-        Console.WriteLine("Bot is running...");
+        Console.WriteLine("Bot is starting...");
         await Task.Run(async () => await BackgroundTasks.TrackVcActivity(client));
         await Task.Delay(-1);
     }
