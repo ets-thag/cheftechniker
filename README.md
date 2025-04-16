@@ -6,7 +6,6 @@ The file needs to be of this format:
 ```json
 {
   "Token": "YOUR_BOT_TOKEN",
-  "LogChannelId": "LOG_CHANNEL_ID",
   "DebugGuildId": "DEBUG_GUILD_ID"
 }
 ```
