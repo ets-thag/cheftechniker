@@ -13,6 +13,11 @@ namespace DiscordBot.Modules
         {
             return RunGit($"log -n {count} --pretty=format:\"• %s (%cr)\"") ?? "No changelog available.";
         }
+        
+        public static string GetBranch()
+        {
+            return RunGit("rev-parse --abbrev-ref HEAD") ?? "unknown";
+        }
 
         private static string? RunGit(string args)
         {
