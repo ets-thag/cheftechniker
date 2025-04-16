@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace DiscordBot
+namespace DiscordBot.Modules
 {
     public static class VersionInfo
     {

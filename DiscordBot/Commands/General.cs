@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using DiscordBot.Modules;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.ContextChecks;
 using DSharpPlus.Entities;
