@@ -1,15 +1,15 @@
 using Dapper;
 using MySqlConnector;
 
-namespace DiscordBot;
+namespace DiscordBot.Modules;
 
 public abstract class Database
 {
     private const string ConnectionString = "Server=localhost;Database=thagbot;User ID=cheftechniker;";
 
-    // Guilds Stuff //
+    // Table guilds //
 
-    public static async Task<bool> InsertGuild(ulong guildId, ulong logChannelId)
+    public static async Task InsertGuild(ulong guildId, ulong logChannelId)
     {
         await using var connection = new MySqlConnection(ConnectionString);
         await connection.OpenAsync();
@@ -25,12 +25,10 @@ public abstract class Database
             const string insertQuery = "INSERT INTO guilds VALUES (@GuildId, @LogchannelId)";
             await connection.ExecuteAsync(insertQuery, guild);
             Console.WriteLine($"({guild.GuildId}, {guild.LogchannelId}) inserted successfully into guilds.");
-            return true;
         }
         catch (Exception)
         {
             Console.WriteLine("Key already exists in the database.");
-            return false;
         }
     }
 
@@ -52,7 +50,7 @@ public abstract class Database
         }
     }
 
-    public static async Task<bool> UpdateLogChannel(ulong guildId, ulong logChannelId)
+    public static async Task UpdateLogChannel(ulong guildId, ulong logChannelId)
     {
         await using var connection = new MySqlConnection(ConnectionString);
         await connection.OpenAsync();
@@ -61,12 +59,10 @@ public abstract class Database
         {
             const string updateQuery = "UPDATE guilds SET logchannel_id = @LogchannelId WHERE guild_id = @GuildId";
             await connection.ExecuteAsync(updateQuery, new { GuildId = guildId, LogchannelId = logChannelId });
-            return true;
         }
         catch (Exception)
         {
             Console.WriteLine("Error updating the log channel in the database.");
-            return false;
         }
     }
 
@@ -131,7 +127,7 @@ public abstract class Database
         public ulong LogchannelId { get; init; }
     }
 
-    // Leaderboard Stuff //
+    // Table voice_activity //
 
     public static async Task<bool> UserInGuildExists(ulong guildId, ulong userId)
     {
@@ -153,7 +149,7 @@ public abstract class Database
         }
     }
 
-    public static async Task<bool> InsertUser(ulong guildId, ulong userId)
+    public static async Task InsertUser(ulong guildId, ulong userId)
     {
         await using var connection = new MySqlConnection(ConnectionString);
         await connection.OpenAsync();
@@ -170,17 +166,15 @@ public abstract class Database
             const string insertQuery =
                 "INSERT INTO voice_activity (guild_id, user_id, minutes_in_vc) VALUES (@GuildId, @UserId, @MinutesInVc)";
             await connection.ExecuteAsync(insertQuery, voiceActivity);
-            return true;
         }
         catch (Exception e)
         {
             Console.WriteLine("Error inserting the user into the database.");
             Console.WriteLine(e);
-            return false;
         }
     }
 
-    public static async Task<bool> IncrementMinutesInVc(ulong guildId, ulong userId)
+    public static async Task IncrementMinutesInVc(ulong guildId, ulong userId)
     {
         await using var connection = new MySqlConnection(ConnectionString);
         await connection.OpenAsync();
@@ -190,12 +184,10 @@ public abstract class Database
             const string updateQuery =
                 "UPDATE voice_activity SET minutes_in_vc = minutes_in_vc + 1 WHERE guild_id = @GuildId AND user_id = @UserId";
             await connection.ExecuteAsync(updateQuery, new { GuildId = guildId, UserId = userId });
-            return true;
         }
         catch (Exception)
         {
             Console.WriteLine("Error incrementing the minute in VC in the database.");
-            return false;
         }
     }
 
@@ -219,8 +211,7 @@ public abstract class Database
         }
     }
 
-    // Get the top 10 users with the most minutes in VC
-    public static async Task<IEnumerable<VoiceActivity>> GetTopVcUsers(ulong guildId)
+    public static async Task<IEnumerable<VoiceActivity>> GetTopVcUsers(ulong guildId, int limit = 5)
     {
         await using var connection = new MySqlConnection(ConnectionString);
         await connection.OpenAsync();
@@ -229,8 +220,9 @@ public abstract class Database
         try
         {
             const string selectQuery =
-                "SELECT user_id AS UserId, guild_id as GuildID, minutes_in_vc AS MinutesInVc FROM voice_activity WHERE guild_id = @GuildId ORDER BY minutes_in_vc DESC LIMIT 10";
-            var topVcUsers = await connection.QueryAsync<VoiceActivity>(selectQuery, new { GuildId = guildId });
+                "SELECT user_id AS UserId, guild_id as GuildID, minutes_in_vc AS MinutesInVc FROM voice_activity WHERE guild_id = @GuildId ORDER BY minutes_in_vc DESC LIMIT @Limit";
+            var topVcUsers =
+                await connection.QueryAsync<VoiceActivity>(selectQuery, new { GuildId = guildId, Limit = limit });
 
             var voiceActivities = topVcUsers as VoiceActivity[] ?? topVcUsers.ToArray();
             foreach (var user in voiceActivities)

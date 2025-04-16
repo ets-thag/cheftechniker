@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using DiscordBot.Modules;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.ContextChecks;
 using DSharpPlus.Entities;
@@ -70,7 +71,7 @@ public class General
         var changelog = VersionInfo.GetChangelog();
 
         var embed = new DiscordEmbedBuilder()
-            .WithTitle($"📦 Bot Version: `{version}`")
+            .WithTitle($"\ud81a\udda5 Bot Branch: `{VersionInfo.GetBranch()}`📦 Bot Version: `{version}`")
             .WithDescription("📝 Recent Changes:\n" + $"```md\n{changelog}\n```")
             .WithColor(DiscordColor.Green)
             .WithTimestamp(DateTimeOffset.UtcNow);

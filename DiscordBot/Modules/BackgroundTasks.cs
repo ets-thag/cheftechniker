@@ -1,7 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 
-namespace DiscordBot;
+namespace DiscordBot.Modules;
 
 public abstract class BackgroundTasks
 {

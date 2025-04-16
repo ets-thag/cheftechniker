@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace DiscordBot
+namespace DiscordBot.Modules
 {
     public static class VersionInfo
     {
@@ -12,6 +12,11 @@ namespace DiscordBot
         public static string GetChangelog(int count = 5)
         {
             return RunGit($"log -n {count} --pretty=format:\"• %s (%cr)\"") ?? "No changelog available.";
+        }
+        
+        public static string GetBranch()
+        {
+            return RunGit("rev-parse --abbrev-ref HEAD") ?? "unknown";
         }
 
         private static string? RunGit(string args)

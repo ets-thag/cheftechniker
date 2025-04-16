@@ -2,11 +2,11 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
-namespace DiscordBot
+namespace DiscordBot.Modules
 {
     internal static class Logger
     {
-        public static async Task OnMessageDeleted(DiscordClient client, MessageDeletedEventArgs eventArgs)
+        public static async Task LogDeletedMessage(DiscordClient client, MessageDeletedEventArgs eventArgs)
         {
             if (eventArgs.Message.Author == null) return;
 
@@ -15,9 +15,7 @@ namespace DiscordBot
             if (logChannelId == 0UL) return;
 
             var logChannel = guild.GetChannelAsync(logChannelId);
-
-            Console.WriteLine(eventArgs.Message.Content);
-
+            
             var avatarUrl = eventArgs.Message.Author.AvatarUrl;
 
             var embed = new DiscordEmbedBuilder()
@@ -36,7 +34,7 @@ namespace DiscordBot
             await client.SendMessageAsync(await logChannel, embed: embed.Build());
         }
 
-        public static async Task OnMessageUpdated(DiscordClient client, MessageUpdatedEventArgs eventArgs)
+        public static async Task LogUpdatedMessage(DiscordClient client, MessageUpdatedEventArgs eventArgs)
         {
             if (eventArgs.Message.Content == eventArgs.MessageBefore?.Content) return; // skip formatting edits
 
