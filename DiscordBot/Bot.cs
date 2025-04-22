@@ -4,6 +4,7 @@ using DSharpPlus;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
+using Math = DiscordBot.Commands.Math;
 
 namespace DiscordBot;
 
@@ -15,7 +16,7 @@ public class Bot
 
         builder.UseCommands((_, extension) =>
         {
-            extension.AddCommands([typeof(Fun), typeof(General), typeof(Logging), typeof(Leaderboard)]);
+            extension.AddCommands([typeof(Fun), typeof(General), typeof(Logging), typeof(Leaderboard), typeof(Math)]);
             var slashCommandProcessor = new SlashCommandProcessor();
             extension.AddProcessor(slashCommandProcessor);
         }, new CommandsConfiguration()
