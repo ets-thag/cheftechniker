@@ -98,7 +98,7 @@ public class General
             StartInfo = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "/bin/bash",
-                Arguments = "./update.sh",
+                Arguments = "/opt/cheftechniker/DiscordBot/update.sh",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
