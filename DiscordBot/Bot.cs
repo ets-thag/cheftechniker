@@ -8,7 +8,7 @@ using Math = DiscordBot.Commands.Math;
 
 namespace DiscordBot;
 
-public class Bot
+public static class Bot
 {
     public static async Task RunAsync()
     {
@@ -21,7 +21,7 @@ public class Bot
             extension.AddProcessor(slashCommandProcessor);
         }, new CommandsConfiguration()
         {
-            DebugGuildId = Config.DebugGuildId // Set to 0 to disable debug guild
+            DebugGuildId = 0 // Set to 0 to disable debug guild. Config.DebugGuildId for debugging
         });
 
         builder.ConfigureEventHandlers(
