@@ -3,7 +3,7 @@
 To run the bot locally, you need to add a config.json file in the project directory.
 The file needs to be of this format:
 
-Bot is inteded to run as a user "cheftechniker" and the directory should be /opt/cheftechniker.
+Bot is intended to run as a user "cheftechniker" and the directory should be /opt/cheftechniker.
 
 ```json
 {
