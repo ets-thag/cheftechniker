@@ -8,13 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Dapper" Version="2.1.66"/>
-        <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02566" />
-        <PackageReference Include="DSharpPlus.Commands" Version="5.0.0-nightly-02566" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.3.25171.5"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.0-preview.3.25171.5"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-preview.3.25171.5"/>
-        <PackageReference Include="MySqlConnector" Version="2.4.0"/>
+        <PackageReference Include="Dapper" Version="2.1.89" />
+        <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02613" />
+        <PackageReference Include="DSharpPlus.Commands" Version="5.0.0-nightly-02613" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="11.0.0-rc.1.26425.128" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="11.0.0-rc.1.26425.128" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="11.0.0-rc.1.26425.128" />
+        <PackageReference Include="MySqlConnector" Version="2.6.2" />
         <None Update="config.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
