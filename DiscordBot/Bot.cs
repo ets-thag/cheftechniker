@@ -1,3 +1,4 @@
+using System.Text;
 using DiscordBot.Commands;
 using DiscordBot.Modules;
 using DSharpPlus;
@@ -19,15 +20,24 @@ public static class Bot
             extension.AddCommands([typeof(Fun), typeof(General), typeof(Logging), typeof(Leaderboard), typeof(Math)]);
             var slashCommandProcessor = new SlashCommandProcessor();
             extension.AddProcessor(slashCommandProcessor);
+            extension.CommandErrored += async (_, eventArgs) =>
+            {
+                StringBuilder stringBuilder = new();
+                stringBuilder.Append("An error occured during command execution:");
+                stringBuilder.Append(eventArgs.Exception.GetType().Name);
+                stringBuilder.Append("If this error persists, consider contacting the support team.");
+                await eventArgs.Context.RespondAsync(stringBuilder.ToString());
+            };
         }, new CommandsConfiguration()
         {
+            UseDefaultCommandErrorHandler = false,
             DebugGuildId = 0 // Set to 0 to disable debug guild. Config.DebugGuildId for debugging
         });
 
-        builder.ConfigureEventHandlers(
-            b => b.HandleMessageDeleted(EventHandlers.OnMessageDeleted)
-                .HandleMessageUpdated(EventHandlers.OnMessageUpdated)
-                .HandleGuildDownloadCompleted(EventHandlers.OnGuildDownloadCompleted)
+
+        builder.ConfigureEventHandlers(b => b.HandleMessageDeleted(EventHandlers.OnMessageDeleted)
+            .HandleMessageUpdated(EventHandlers.OnMessageUpdated)
+            .HandleGuildDownloadCompleted(EventHandlers.OnGuildDownloadCompleted)
         );
 
         var client = builder.Build();
